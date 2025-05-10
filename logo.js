@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  const MIN_W = 1875;  // порог в пикселях
+  const MIN_W = 375;  // порог в пикселях
 
   function startPlugin(){
     window.logoplugin = true;
