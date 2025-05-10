@@ -48,7 +48,10 @@
 
           this.style.objectFit = 'contain';
           this.style.marginTop = '10px';
-          // вставка в DOM как было
+          e.object.activity.render()
+            .find('.full-start-new__title')
+            .html('')         // очищаем текст
+            .append(this);    // вставляем наше <img>
         };
 
       });
