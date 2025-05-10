@@ -1,9 +1,6 @@
 (function(){
   'use strict';
 
-  const MIN_W = 300;    // порог, если нужен
-  const MARGIN_TOP = 50; // отступ сверху в пикселях
-
   function startPlugin(){
     window.logoplugin = true;
 
@@ -34,21 +31,26 @@
         }
 
         img.onload = function(){
-          // при желании можно проверить naturalWidth и только тогда что‑то делать
-          // if(this.naturalWidth < MIN_W){ … }
+          const NW = this.naturalWidth;
+          const NH = this.naturalHeight;
+          const MAX_W = 600;
+          const MAX_H = 300;
 
-          // ставим отступ сверху и сохраняем пропорции
-          this.style.marginTop    = MARGIN_TOP + 'px';
-          this.style.maxHeight    = 'none';
-          this.style.width        = '100%';      // или конкретно MIN_W+'px'
-          this.style.objectFit    = 'contain';
+          if (NW < MAX_W) {
+            this.style.width  = NW + 'px';
+            this.style.height = NH + 'px';
+          } else {
+            this.style.maxWidth  = MAX_W + 'px';
+            this.style.maxHeight = MAX_H + 'px';
+            this.style.width     = 'auto';
+            this.style.height    = 'auto';
+          }
 
-          // вставляем в заголовок
-          e.object.activity.render()
-            .find('.full-start-new__title')
-            .html('')
-            .append(this);
+          this.style.objectFit = 'contain';
+          this.style.marginTop = '10px';
+          // вставка в DOM как было
         };
+
       });
     });
   }
