@@ -48,7 +48,7 @@
 
           this.style.objectFit = 'contain';
           this.style.marginTop = '20px';
-          this.style.marginDown = '20px';
+          this.style.marginBottom = '20px';
 
           e.object.activity.render()
             .find('.full-start-new__title')
