@@ -47,7 +47,8 @@
           }
 
           this.style.objectFit = 'contain';
-          this.style.marginTop = '10px';
+          this.style.marginTop = '50px';
+
           e.object.activity.render()
             .find('.full-start-new__title')
             .html('')         // очищаем текст
