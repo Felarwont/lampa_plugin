@@ -1,40 +1,48 @@
 (function(){
   'use strict';
 
-  const MIN_W = 375;  // порог в пикселях
+  const MIN_W = 300;    // порог, если нужен
+  const MARGIN_TOP = 50; // отступ сверху в пикселях
 
   function startPlugin(){
     window.logoplugin = true;
 
     Lampa.Listener.follow('full', function(e){
-      if (e.type !== 'complite' || Lampa.Storage.get('logo_glav') === '1') return;
+      if(e.type !== 'complite' || Lampa.Storage.get('logo_glav') === '1') return;
 
       const data = e.data.movie;
       const type = data.name ? 'tv' : 'movie';
-
-      if (!data.id) return;
+      if(!data.id) return;
 
       const url = Lampa.TMDB.api(
         `${type}/${data.id}/images?api_key=${Lampa.TMDB.key()}&language=${Lampa.Storage.get('language')}`
       );
 
       $.get(url, function(res){
-        if (!res.logos || !res.logos[0]) return;
-
+        if(!res.logos || !res.logos[0]) return;
         const logoPath = res.logos[0].file_path;
-        if (!logoPath) return;
+        if(!logoPath) return;
 
-        // создаём img-элемент вручную, чтобы повесить onload
+        // создаём img, чтобы повесить onload
         const img = new Image();
-        img.src = Lampa.TMDB.image('/t/p/w300' + logoPath.replace('.svg','.png'));
+
+        // выбираем источник: SVG → оригинал, иначе тоже оригинал
+        if(logoPath.endsWith('.svg')){
+          img.src = Lampa.TMDB.image('/t/p/original'+logoPath);
+        } else {
+          img.src = Lampa.TMDB.image('/t/p/original'+logoPath);
+        }
 
         img.onload = function(){
-          // если родная ширина < MIN_W — увеличиваем
-          if (this.naturalWidth < MIN_W) {
-            this.style.width           = MIN_W + 'px';
-            this.style.height          = 'auto';
-            this.style.objectFit       = 'contain';  
-          }
+          // при желании можно проверить naturalWidth и только тогда что‑то делать
+          // if(this.naturalWidth < MIN_W){ … }
+
+          // ставим отступ сверху и сохраняем пропорции
+          this.style.marginTop    = MARGIN_TOP + 'px';
+          this.style.maxHeight    = 'none';
+          this.style.width        = '100%';      // или конкретно MIN_W+'px'
+          this.style.objectFit    = 'contain';
+
           // вставляем в заголовок
           e.object.activity.render()
             .find('.full-start-new__title')
@@ -50,14 +58,14 @@
     param: {
       name: 'logo_glav',
       type: 'select',
-      values: {1:'Скрыть', 0:'Отображать'},
+      values: {1:'Скрыть',0:'Отображать'},
       default: '0'
     },
     field: {
       name: 'Логотипы вместо названий',
-      description: 'Отображает логотипы фильмов вместо текста'
+      description: 'Показывать логотипы фильмов вместо текста'
     }
   });
 
-  if (!window.logoplugin) startPlugin();
+  if(!window.logoplugin) startPlugin();
 })();
