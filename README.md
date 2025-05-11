@@ -21,7 +21,7 @@
     <li>Откройте приложение Lampa</li>
     <li>Перейдите в <strong>Настройки</strong> → <strong>Расширения</strong></li>
     <li>Нажмите <strong>"Добавить плагин"</strong></li>
-    <li>Вставьте эту ссылку:</li>
+    <li>Вставьте адрес плагина:</li>
       
 ```
 https://felarwont.github.io/lampa_plugin/logo.js
