@@ -2,14 +2,9 @@
 ### *Больше чем название. Меньше слов.*
 
 <div align="center">
-  <table>
-    <tr>
-      <th>До</th>
-      <th>После</th>
-    </tr>
-    <tr>
-      <td><img src="https://i.postimg.cc/J0HNQNSS/2025-05-11-164323.png" width="600"></td>
-      <td><img src="https://i.postimg.cc/bwgmrTPR/2025-05-11-164143.png" width="600"></td>
-    </tr>
-  </table>
+  <h2>До:</h2>
+  <img src="https://i.postimg.cc/J0HNQNSS/2025-05-11-164323.png" width="450">
+
+  <h2 style="margin-top: 40px;">После:</h2>
+  <img src="https://i.postimg.cc/bwgmrTPR/2025-05-11-164143.png" width="450">
 </div>
