@@ -60,19 +60,5 @@
     });
   }
 
-  Lampa.SettingsApi.addParam({
-    component: 'interface',
-    param: {
-      name: 'logo_glav',
-      type: 'select',
-      values: {1:'Скрыть',0:'Отображать'},
-      default: '0'
-    },
-    field: {
-      name: 'Логотипы вместо названий',
-      description: 'Показывать логотипы фильмов вместо текста'
-    }
-  });
-
   if(!window.logoplugin) startPlugin();
 })();
