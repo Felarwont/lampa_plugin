@@ -33,22 +33,36 @@
         img.onload = function(){
           const NW = this.naturalWidth;
           const NH = this.naturalHeight;
-          const MAX_W = 600;
-          const MAX_H = 300;
+    
+          // Динамические максимальные размеры
+          const MAX_W = Math.min(600, window.innerWidth * 0.8); // 80% ширины экрана, но не более 600px
+          const MAX_H = Math.min(300, window.innerHeight * 0.3); // 30% высоты экрана, но не более 300px
 
-          if (NW < MAX_W) {
-            this.style.width  = NW + 'px';
-            this.style.height = NH + 'px';
-          } else {
-            this.style.maxWidth  = MAX_W + 'px';
-            this.style.maxHeight = MAX_H + 'px';
-            this.style.width     = 'auto';
-            this.style.height    = 'auto';
+          // Рассчет пропорций
+          const aspectRatio = NH / NW;
+
+          if (NW < MAX_W && NH < MAX_H) {
+              this.style.width = NW + 'px';
+              this.style.height = NH + 'px';
+          } 
+          else {
+              // Корректируем размеры с учетом пропорций
+              let calculatedWidth = MAX_W;
+              let calculatedHeight = calculatedWidth * aspectRatio;
+      
+              if (calculatedHeight > MAX_H) {
+                  calculatedHeight = MAX_H;
+                  calculatedWidth = calculatedHeight / aspectRatio;
+              }
+      
+              this.style.maxWidth = calculatedWidth + 'px';
+              this.style.maxHeight = calculatedHeight + 'px';
+              this.style.width = '100%'; // Для лучшей адаптации внутри контейнера
+              this.style.height = 'auto';
           }
-
+      
           this.style.objectFit = 'contain';
-          this.style.marginTop = '20px';
-          this.style.marginBottom = '20px';
+          this.style.margin = '20px 0';
 
           e.object.activity.render()
             .find('.full-start-new__title')
