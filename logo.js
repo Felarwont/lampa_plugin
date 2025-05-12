@@ -30,39 +30,50 @@
           img.src = Lampa.TMDB.image('/t/p/original'+logoPath);
         }
 
-        img.onload = function(){
+        img.onload = function() {
           const NW = this.naturalWidth;
           const NH = this.naturalHeight;
-    
-          // Динамические максимальные размеры
-          const MAX_W = Math.min(600, window.innerWidth * 0.8); // 80% ширины экрана, но не более 600px
-          const MAX_H = Math.min(300, window.innerHeight * 0.3); // 30% высоты экрана, но не более 300px
-
-          // Рассчет пропорций
-          const aspectRatio = NH / NW;
-
-          if (NW < MAX_W && NH < MAX_H) {
-              this.style.width = NW + 'px';
-              this.style.height = NH + 'px';
-          } 
-          else {
-              // Корректируем размеры с учетом пропорций
-              let calculatedWidth = MAX_W;
-              let calculatedHeight = calculatedWidth * aspectRatio;
+          
+          // Динамические параметры
+          const isMobile = window.matchMedia('(max-width: 768px)').matches;
+          const container = e.object.activity.render().find('.full-start-new__title');
+          const containerWidth = container.width();
+          
+          // Рассчет размеров
+          let targetWidth = Math.min(
+              NW, 
+              isMobile ? containerWidth * 0.9 : 600, // На мобильных - 90% ширины контейнера
+              window.innerWidth * 0.8 // Максимум 80% ширины экрана
+          );
+          
+          let targetHeight = NH * (targetWidth / NW);
       
-              if (calculatedHeight > MAX_H) {
-                  calculatedHeight = MAX_H;
-                  calculatedWidth = calculatedHeight / aspectRatio;
-              }
+          // Применение стилей
+          this.style.cssText = `
+              width: ${targetWidth}px;
+              height: ${targetHeight}px;
+              max-width: 100%;
+              max-height: ${isMobile ? '40vh' : '300px'};
+              object-fit: contain;
+              margin: ${isMobile ? '10px 0' : '20px 0'};
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+          `;
       
-              this.style.maxWidth = calculatedWidth + 'px';
-              this.style.maxHeight = calculatedHeight + 'px';
-              this.style.width = '100%'; // Для лучшей адаптации внутри контейнера
-              this.style.height = 'auto';
-          }
+          // Важно: принудительный рефлоу перед обновлением
+          container[0].offsetHeight;
+          
+          container
+              .html('')
+              .append(this);
       
-          this.style.objectFit = 'contain';
-          this.style.margin = '20px 0';
+          // Обработчик изменения размера
+          let resizeTimer;
+          window.addEventListener('resize', () => {
+              clearTimeout(resizeTimer);
+              resizeTimer = setTimeout(() => this.onload(), 200);
+          });
 
           e.object.activity.render()
             .find('.full-start-new__title')
